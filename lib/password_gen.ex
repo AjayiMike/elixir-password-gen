@@ -15,21 +15,28 @@ defmodule PasswordGen do
         {:error, "Length should be an interger"}
       else
         length = options["length"] |> String.trim() |> String.to_integer()
-        options_without_length = Map.delete(options, "length")
-        options_values = Map.values(options_without_length)
-        allIsBoolean = options_values |> Enum.all?(fn x -> String.to_atom(x) |> is_boolean() end)
 
-        unless allIsBoolean do
-          {:error, "all options except length must be boolean"}
+        unless length >= 5 do
+          {:error, "Length should be greater than or equal to 5"}
         else
-          options = included_options(options_without_length)
-          invalidOptionIsIncluded = options |> Enum.any?(&(&1 not in @allowed_options))
+          options_without_length = Map.delete(options, "length")
+          options_values = Map.values(options_without_length)
 
-          if invalidOptionIsIncluded do
-            {:error, "only length numbers, uppercase and symbols are allow options"}
+          allIsBoolean =
+            options_values |> Enum.all?(fn x -> String.to_atom(x) |> is_boolean() end)
+
+          unless allIsBoolean do
+            {:error, "all options except length must be boolean"}
           else
-            generated_password = generate_strings(length, options)
-            {:okay, generated_password}
+            options = included_options(options_without_length)
+            invalidOptionIsIncluded = options |> Enum.any?(&(&1 not in @allowed_options))
+
+            if invalidOptionIsIncluded do
+              {:error, "only length numbers, uppercase and symbols are allow options"}
+            else
+              generated_password = generate_strings(length, options)
+              {:okay, generated_password}
+            end
           end
         end
       end

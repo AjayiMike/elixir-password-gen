@@ -38,6 +38,11 @@ defmodule PasswordGenTest do
     assert {:error, _error} = PasswordGen.generate(options)
   end
 
+  test "return error when length is less than 5" do
+    options = %{"length" => "4"}
+    {:error, _error} = PasswordGen.generate(options)
+  end
+
   test "length of returned string is the option provided" do
     length_option = %{"length" => "10"}
     {:okay, result} = PasswordGen.generate(length_option)
@@ -183,7 +188,6 @@ defmodule PasswordGenTest do
     }
 
     {:okay, result} = PasswordGen.generate(numberOptions)
-    IO.puts(result)
 
     assert String.contains?(result, options.symbols)
     assert String.contains?(result, options.uppercase)

@@ -183,7 +183,6 @@ defmodule PasswordGeneratorTest do
     }
 
     {:okay, result} = PasswordGenerator.generate(numberOptions)
-    IO.puts(result)
 
     assert String.contains?(result, options.symbols)
     assert String.contains?(result, options.uppercase)
