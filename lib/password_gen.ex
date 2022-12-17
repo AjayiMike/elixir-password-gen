@@ -9,9 +9,7 @@ defmodule PasswordGen do
     unless hasLength do
       {:error, "You need to provide the length of the password"}
     else
-      length = options["length"]
-      numbers = Enum.map(0..9, &Integer.to_string(&1))
-      lengthIsInt = String.contains?(length, numbers)
+      lengthIsInt = checkLengthIsInt(options)
 
       unless lengthIsInt do
         {:error, "Length should be an interger"}
@@ -36,6 +34,12 @@ defmodule PasswordGen do
         end
       end
     end
+  end
+
+  defp checkLengthIsInt(options) do
+    length = options["length"]
+    numbers = Enum.map(0..9, &Integer.to_string(&1))
+    String.contains?(length, numbers)
   end
 
   defp generate_strings(length, options) do
